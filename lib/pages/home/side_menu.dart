@@ -1,3 +1,4 @@
+import 'package:admin_panel/pages/login.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
@@ -10,17 +11,24 @@ class SideMenu extends StatelessWidget {
       child: ListView(
         children: [
           DrawerHeader(
-            child: SvgPicture.asset("assets/notification.svg"),
+            child: SvgPicture.asset("assets/menu_dashboard.svg"),
           ),
           DrawerListTile(
             title: "Notification",
-            svgSrc: "assets/menu_dashboard.svg",
+            svgSrc: "assets/notification.svg",
             press: () {changePage.call('Notification');},
           ),
           DrawerListTile(
             title: "Deeplink",
             svgSrc: "assets/deeplink.svg",
             press: () {changePage.call('Deeplink');},
+          ),
+          DrawerListTile(
+            title: "Logout",
+            svgSrc: "assets/logout.svg",
+            press: () {Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => const LoginPage()));},
           ),
         ],
       ),

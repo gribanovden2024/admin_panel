@@ -13,9 +13,7 @@ class NotificationPage extends StatelessWidget {
             borderRadius: BorderRadius.all(Radius.circular(16)),
             color: Colors.blueGrey),
         child: Column(children: [
-          const SizedBox(
-            height: defaultPadding,
-          ),
+          const SizedBox(height: defaultPadding),
           ImputsField(text: 'Message'),
           ImputsField(text: 'Groups'),
           ImputsField(
