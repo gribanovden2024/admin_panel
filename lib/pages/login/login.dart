@@ -37,8 +37,8 @@ class LoginPage extends StatelessWidget {
           children: [
             const Text('Login',style: defStyle,),
             Container(
-              margin: const EdgeInsets.all(defaultPadding),
-              padding: const EdgeInsets.all(defaultPadding),
+              margin: EdgeInsets.all(defaultPadding),
+              padding: EdgeInsets.all(defaultPadding),
               width: 500,
               decoration: const BoxDecoration(
                 borderRadius: BorderRadius.all(Radius.circular(10)),
@@ -57,7 +57,7 @@ class LoginPage extends StatelessWidget {
                         borderRadius: BorderRadius.all(Radius.circular(10)),
                       ),
                       suffixIcon: Padding(
-                        padding: const EdgeInsets.only(right: defaultPadding*0.4),
+                        padding: EdgeInsets.only(right: defaultPadding*0.4),
                         child: ElevatedButton(
                           onPressed: () {presenter.getCode(controller1.text);},
                           style: ButtonStyle(
@@ -69,7 +69,7 @@ class LoginPage extends StatelessWidget {
                       ),
                     ),
                   ),
-                  const SizedBox(
+                  SizedBox(
                     height: defaultPadding,
                   ),
                   TextField(
@@ -87,7 +87,7 @@ class LoginPage extends StatelessWidget {
                         borderRadius: BorderRadius.all(Radius.circular(10)),
                       ),
                       suffixIcon: Padding(
-                        padding: const EdgeInsets.only(right: defaultPadding*0.4),
+                        padding: EdgeInsets.only(right: defaultPadding*0.4),
                         child: ElevatedButton(
                           onPressed: login,
                           style: ButtonStyle(

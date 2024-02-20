@@ -1,19 +1,21 @@
 import 'package:flutter/material.dart';
 
 import '../../constants.dart';
+import '../../responsive.dart';
 import 'imputs_field.dart';
 
 class NotificationPage extends StatelessWidget {
   const NotificationPage({super.key});
 
   @override
-  Widget build(BuildContext context) => Container(
-        padding: const EdgeInsets.symmetric(horizontal: defaultPadding),
+  Widget build(BuildContext context) {
+    return Container(
+        padding: EdgeInsets.symmetric(horizontal: defaultPadding),
         decoration: const BoxDecoration(
             borderRadius: BorderRadius.all(Radius.circular(16)),
             color: Colors.blueGrey),
         child: Column(children: [
-          const SizedBox(height: defaultPadding),
+          SizedBox(height: defaultPadding),
           ImputsField(text: 'Message'),
           ImputsField(text: 'Groups'),
           ImputsField(
@@ -36,9 +38,7 @@ class NotificationPage extends StatelessWidget {
               ),
             ],
           ),
-          const SizedBox(
-            height: defaultPadding,
-          ),
-        ]),
-      );
+          SizedBox(height: defaultPadding)
+        ]));
+  }
 }

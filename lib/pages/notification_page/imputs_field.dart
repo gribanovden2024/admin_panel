@@ -24,8 +24,8 @@ class ImputsField extends StatelessWidget {
           suffixIcon: InkWell(
             onTap: () {},
             child: Container(
-              padding: const EdgeInsets.all(defaultPadding * 0.25),
-              margin: const EdgeInsets.symmetric(horizontal: defaultPadding / 2),
+              padding: EdgeInsets.all(defaultPadding * 0.25),
+              margin: EdgeInsets.symmetric(horizontal: defaultPadding * 0.5),
               decoration: const BoxDecoration(
                 color: primaryColor,
                 borderRadius: BorderRadius.all(Radius.circular(10)),
@@ -35,7 +35,7 @@ class ImputsField extends StatelessWidget {
           ),
         ),
       ),
-      const SizedBox(height: defaultPadding,)
+      SizedBox(height: defaultPadding,)
     ],
   );
 }

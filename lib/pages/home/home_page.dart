@@ -66,7 +66,7 @@ class _HomePageState extends State<HomePage> {
                       ],
                     ),
                     Padding(
-                      padding: const EdgeInsets.symmetric(
+                      padding: EdgeInsets.symmetric(
                           horizontal: defaultPadding),
                       child: _buildPageWidget(),
                     ),
