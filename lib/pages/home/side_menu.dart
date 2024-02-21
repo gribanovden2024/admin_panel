@@ -1,38 +1,48 @@
-import 'package:admin_panel/pages/login/login.dart';
+import 'package:admin_panel/pages/login/login_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 class SideMenu extends StatelessWidget {
-  const SideMenu(this.changePage,{super.key});
+  const SideMenu(this.changePage, {super.key});
+
   final ValueSetter<String> changePage;
+
   @override
   Widget build(context) => Drawer(
-      width: 190,
-      child: ListView(
-        children: [
-          DrawerHeader(
-            child: SvgPicture.asset("assets/menu_dashboard.svg"),
-          ),
-          DrawerListTile(
-            title: "Notification",
-            svgSrc: "assets/notification.svg",
-            press: () {changePage.call('Notification');},
-          ),
-          DrawerListTile(
-            title: "Deeplink",
-            svgSrc: "assets/deeplink.svg",
-            press: () {changePage.call('Deeplink');},
-          ),
-          DrawerListTile(
-            title: "Logout",
-            svgSrc: "assets/logout.svg",
-            press: () {Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => const LoginPage()));},
-          ),
-        ],
-      ),
-    );
+        width: 190,
+        child: ListView(
+          children: [
+            DrawerHeader(
+              child: SvgPicture.asset("assets/menu_dashboard.svg"),
+            ),
+            DrawerListTile(
+              title: "Notification",
+              svgSrc: "assets/notification.svg",
+              press: () {
+                changePage.call('Notification');
+              },
+            ),
+            DrawerListTile(
+              title: "Deeplink",
+              svgSrc: "assets/deeplink.svg",
+              press: () {
+                changePage.call('Deeplink');
+              },
+            ),
+            DrawerListTile(
+              title: "Logout",
+              svgSrc: "assets/logout.svg",
+              press: () {
+                Navigator.pushAndRemoveUntil(
+                  context,
+                  MaterialPageRoute(builder: (context) => const LoginPage()),
+                  (route) => false,
+                );
+              },
+            ),
+          ],
+        ),
+      );
 }
 
 class DrawerListTile extends StatelessWidget {

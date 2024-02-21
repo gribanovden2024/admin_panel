@@ -1,8 +1,5 @@
-import 'package:admin_panel/pages/home/home_page.dart';
-import 'package:admin_panel/pages/login/login.dart';
+import 'package:admin_panel/pages/login/login_page.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import 'controllers/MenuAppController.dart';
 
 class App extends StatelessWidget {
   const App({super.key});

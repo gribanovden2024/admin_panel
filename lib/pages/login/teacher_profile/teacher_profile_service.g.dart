@@ -12,15 +12,17 @@ class _TeacherProfileService implements TeacherProfileService {
   _TeacherProfileService(
     this._dio, {
     this.baseUrl,
-  });
+  }) {
+    baseUrl ??= 'https://vsu-stage.fittin.ru';
+  }
 
   final Dio _dio;
 
   String? baseUrl;
 
   @override
-  Future<void> part1Email({required EmailPart1Request request}) async {
-    final _extra = <String, dynamic>{};
+  Future<void> part1Email({required String request}) async {
+    const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
     final _data = request;
@@ -31,7 +33,7 @@ class _TeacherProfileService implements TeacherProfileService {
     )
         .compose(
           _dio.options,
-          'https://vsu-stage.fittin.ru/auth/email/part1',
+          '/auth/email/part1',
           queryParameters: queryParameters,
           data: _data,
         )
@@ -44,7 +46,7 @@ class _TeacherProfileService implements TeacherProfileService {
 
   @override
   Future<AuthResponse> part2Email({required EmailPart2Request request}) async {
-    final _extra = <String, dynamic>{};
+    const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
     final _data = request;
@@ -56,7 +58,7 @@ class _TeacherProfileService implements TeacherProfileService {
     )
             .compose(
               _dio.options,
-              'https://vsu-stage.fittin.ru/auth/email/part2',
+              '/auth/email/part2',
               queryParameters: queryParameters,
               data: _data,
             )
@@ -72,7 +74,7 @@ class _TeacherProfileService implements TeacherProfileService {
   @override
   Future<FreeTokenDto> postTokenFree(
       {required TokenFreeRequestDto request}) async {
-    final _extra = <String, dynamic>{};
+    const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
     final _data = <String, dynamic>{};
@@ -85,7 +87,7 @@ class _TeacherProfileService implements TeacherProfileService {
     )
             .compose(
               _dio.options,
-              'https://vsu-stage.fittin.ru/auth/token/free',
+              '/auth/token/free',
               queryParameters: queryParameters,
               data: _data,
             )
