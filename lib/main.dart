@@ -2,17 +2,20 @@ import 'dart:io';
 
 import 'package:admin_panel/pages/login/data/configure_dependencies.dart';
 import 'package:admin_panel/pages/login/data/uuid_configurator.dart';
-import 'package:admin_panel/pages/login/interceptor/jwt_interceptor.dart';
-import 'package:core_interfaces/core_interfaces.dart';
+import 'package:core_interfaces/core_interfaces.dart' hide AppConfig, DebugConfig, Environment;
 import 'package:dio/dio.dart';
-import 'package:event_bus/event_bus.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get_it/get_it.dart';
-import 'package:profile/profile.dart';
-import 'package:core_models/core_models.dart';
-import 'package:profile_data/profile_data.dart';
+import 'package:pretty_dio_logger/pretty_dio_logger.dart';
 import 'package:provider/provider.dart';
 import 'app.dart';
+import 'interseptor/app_config.dart';
+import 'interseptor/app_environment.dart';
+import 'interseptor/environment.dart';
+import 'interseptor/environment_repository.dart';
+import 'interseptor/register_modules.dart';
+import 'interseptor/startup.dart';
 
 // void main() async {
 //   final container = await configureContainer();
@@ -22,27 +25,49 @@ import 'app.dart';
 //   ),);
 // }
 void main() async {
-  await initServices();
-  runApp(App());
+  await UUIDConfigurator.configUuid();
+  final environmentRepository = EnvironmentRepository();
+  await environmentRepository.init();
+  final environment = AppEnvironment.fromRepository(
+    defaultConfig: AppConfig(
+      baseUrl: 'https://vsu-stage.fittin.ru',
+      stageUrl: 'https://vsu-stage.fittin.ru',
+      prodUrl: 'https://vsu.fittin.ru',
+      testUrl: 'https://vsu-stage.fittin.ru',
+      proxyUrl: '',
+      proxyStageUrl: '',
+      proxyProdUrl: '',
+      proxyTestUrl: '',
+      config: DebugConfig(
+        debugShowMaterialGrid: false,
+        showPerformanceOverlay: false,
+        checkerboardRasterCacheImages: false,
+        checkerboardOffscreenLayers: false,
+        showSemanticsDebugger: false,
+        debugShowCheckedModeBanner: false,
+      ),
+    ),
+    environmentRepository: environmentRepository,
+  );
+  final container = await configureContainer(environment);
+  SystemChrome.setPreferredOrientations(
+    [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown],
+  );
+  runApp(
+    StartUpWidget(
+      environment: environment,
+      container: container,
+      child: App(
+      ),
+    ),
+  );
 }
 
-Future<void> configureContainer() async {
+Future<GetIt> configureContainer(Environment environment) async {
   configureDependencies();
   final container = getIt;
-  await initServices();
-  // return container;
-}
-
-Future<void> initServices() async {
-  Dio dio = Dio();
-  initDio(dio);
-  final IEventBus _eventBus = EventBus();
-  final IProfileRepository<UserData> _profileRepository =
-      ProfileRepository(ProfileService(dio));
-
-  final jwtInterceptor = JWTInterceptor(dio: dio);
-  dio.interceptors.add(jwtInterceptor);
-  await jwtInterceptor.initTokens();
+  await initServices(environment);
+  return container;
 }
 
 void initDio(Dio dio) async {
@@ -55,62 +80,11 @@ void initDio(Dio dio) async {
     ..sendTimeout = timeout;
   // dio.interceptors.add(PlatformInterceptor());
   // dio.interceptors.add(UUIDInterceptor());
-}
 
-class PlatformInterceptor extends Interceptor {
-  PlatformInterceptor();
-
-  @override
-  void onRequest(RequestOptions options, RequestInterceptorHandler handler) {
-    options.headers['X-Client-OS'] = Platform.isIOS ? 'ios' : 'android';
-    return super.onRequest(options, handler);
-  }
-}
-
-class UUIDInterceptor extends Interceptor {
-  UUIDInterceptor();
-
-  @override
-  void onRequest(RequestOptions options, RequestInterceptorHandler handler) {
-    options.headers['X-Client-ID'] = UUIDConfigurator.uuid;
-    return super.onRequest(options, handler);
-  }
-}
-
-class StartUpWidget extends StatelessWidget {
-  const StartUpWidget({
-    super.key,
-    required this.container,
-    required this.child,
-  });
-
-  final GetIt container;
-  final Widget child;
-
-  @override
-  Widget build(BuildContext context) {
-    return StartUpDomains(
-      container: container,
-      child: child,
-    );
-  }
-}
-
-class StartUpDomains extends StatelessWidget {
-  const StartUpDomains({
-    required this.child,
-    super.key,
-    required this.container,
-  });
-
-  final GetIt container;
-  final Widget child;
-
-  @override
-  Widget build(BuildContext context) {
-    return Provider(
-      create: (context) => container,
-      child: child,
-    );
-  }
+  dio.interceptors.add(
+    PrettyDioLogger(
+      requestHeader: true,
+      requestBody: true,
+    ),
+  );
 }

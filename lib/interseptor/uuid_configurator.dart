@@ -18,16 +18,10 @@ class UUIDConfigurator {
     final sharedPreferences = await SharedPreferences.getInstance();
 
     var uuid = sharedPreferences.getString(uuidKey);
+    print(uuid);
     if (uuid == null) {
-      // final deviceId = await _getDeviceId();
-      uuid = const Uuid().v4(
-        // options: {
-        //   'rng': UuidUtil.mathRNG,
-        //   'namedArgs': {
-        //     const Symbol('seed'): deviceId.hashCode,
-        //   }
-        // },
-      );
+      //final deviceId = await _getDeviceId();
+      uuid = const Uuid().v4();
       await sharedPreferences.setString(uuidKey, uuid);
     }
     return uuid;
