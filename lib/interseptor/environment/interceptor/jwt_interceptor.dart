@@ -49,11 +49,11 @@ class JWTInterceptor extends Interceptor {
 
   /// Getting tokens from cache.
   Future<void> initTokens() async {
-    // final sharedPreferences = await SharedPreferences.getInstance();
-    // if (sharedPreferences.getBool('first_run') ?? true) {
+    final sharedPreferences = await SharedPreferences.getInstance();
+    if (sharedPreferences.getBool('first_run') ?? true) {
       await _storage.deleteAll();
-    //   sharedPreferences.setBool('first_run', false);
-    // }
+      sharedPreferences.setBool('first_run', false);
+    }
 
     _accessToken = await _storage.read(key: 'accessToken');
     _refreshToken = await _storage.read(key: 'refreshToken');

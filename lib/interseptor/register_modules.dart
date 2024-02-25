@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:admin_panel/interseptor/environment/event_bus/event_bus.dart';
-import 'package:admin_panel/interseptor/environment/interceptor/jwt_interceptor.dart';
+// import 'package:admin_panel/interseptor/environment/interceptor/jwt_interceptor.dart';
 import 'package:admin_panel/interseptor/profile/service/profile_service.dart';
 import 'package:admin_panel/interseptor/profile/teacher_profile/data/teacher_profile_repository.dart';
 import 'package:admin_panel/interseptor/profile/teacher_profile/data/teacher_profile_service.dart';
@@ -14,10 +14,12 @@ import 'package:crypto/crypto.dart';
 import 'package:dio/dio.dart';
 import 'package:pretty_dio_logger/pretty_dio_logger.dart';
 import '../pages/login/data/uuid_configurator.dart';
+import '../pages/login/interceptor/uuid_manager.dart';
 import 'configure_dependencies.dart';
 import 'package:injectable/injectable.dart' hide Environment;
 
 import 'environment.dart';
+import 'jwt.dart';
 
 class BasicInterceptor extends Interceptor {
   @override
@@ -32,33 +34,35 @@ Future<void> initServices(Environment environment) async {
   final dio = RegisterModules._dio;
   initDio(environment: environment, dio: dio, additionalInterceptors: []);
 
-  dio.interceptors.add(
-    PrettyDioLogger(
-      requestHeader: true,
-      requestBody: true,
-    ),
-  );
+  // dio.interceptors.add(
+  //   PrettyDioLogger(
+  //     requestHeader: true,
+  //     requestBody: true,
+  //   ),
+  // );
 
-  final jwtInterceptor = JWTInterceptor(
-    dio: dio,
-    profile: profile,
-    freeTokenUrl: '/auth/token/free',
-    refreshUrl: '/auth/token/refresh',
-  );
+  // final jwtInterceptor = JWTInterceptor(
+  //   dio: dio,
+  //   profile: profile,
+  //   freeTokenUrl: '/auth/token/free',
+  //   refreshUrl: '/auth/token/refresh',
+  // );
 
-  dio.interceptors.add(
-    SecureMethodInterceptor(
-      endpoints: [
-        '/auth/email/part1',
-        '/auth/token/free',
-        '/attendance/confirm_attendance/'
-      ],
-      dio: dio,
-    ),
-  );
+  final jwtInterceptor = JWTInterceptor(dio: dio);
+  // dio.interceptors.add(
+  //   SecureMethodInterceptor(
+  //     endpoints: [
+  //       '/auth/email/part1',
+  //       '/auth/token/free',
+  //       '/attendance/confirm_attendance/'
+  //     ],
+  //     dio: dio,
+  //   ),
+  // );
 
-  dio.interceptors.add(jwtInterceptor);
+  await UuidManager.initUUID();
   await jwtInterceptor.initTokens();
+  dio.interceptors.add(jwtInterceptor);
 
 
 
@@ -85,21 +89,25 @@ void initDio({
     dio.interceptors.addAll(additionalInterceptors);
   }
 
-  dio.interceptors.add(PlatformInterceptor());
+  // dio.interceptors.add(PlatformInterceptor());
   dio.interceptors.add(UUIDInterceptor());
 
-  dio.interceptors.add(
-    PrettyDioLogger(
+
+  dio.interceptors.add(PrettyDioLogger(
       requestHeader: true,
       requestBody: true,
-    ),
+    )
   );
 }
+
+
 class PlatformInterceptor extends Interceptor {
   PlatformInterceptor();
 
   @override
   void onRequest(RequestOptions options, RequestInterceptorHandler handler) {
+    String t = Platform.operatingSystem;
+    print(t);
     options.headers['X-Client-OS'] = Platform.isIOS ? 'ios' : 'android';
     return super.onRequest(options, handler);
   }

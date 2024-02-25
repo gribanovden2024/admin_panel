@@ -10,7 +10,7 @@ import 'package:retrofit/retrofit.dart';
 
 part 'profile_service.g.dart';
 
-@RestApi(baseUrl: 'https://vsu-stage.fittin.ru')
+@RestApi()
 abstract class ProfileService {
   factory ProfileService(Dio dio, {String baseUrl}) = _ProfileService;
 

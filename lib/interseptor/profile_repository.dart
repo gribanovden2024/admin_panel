@@ -96,6 +96,7 @@ class ProfileRepository implements IProfileRepository<UserData> {
   Future<void> getFreeToken() async {
     // try {
       final uuid = await _getUuid();
+      print('uuid = $uuid');
       await _service.postTokenFree(
         request: TokenFreeRequestDto(
           userUuid: uuid,
