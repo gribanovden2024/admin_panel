@@ -5,18 +5,18 @@ packages:
     dependency: transitive
     description:
       name: _fe_analyzer_shared
-      sha256: "0b2f2bd91ba804e53a61d757b986f89f1f9eaed5b11e4b2f5a2468d86d6c9fc7"
+      sha256: eb376e9acf6938204f90eb3b1f00b578640d3188b4c8a8ec054f9f479af8d051
       url: "https://pub.dev"
     source: hosted
-    version: "67.0.0"
+    version: "64.0.0"
   analyzer:
     dependency: transitive
     description:
       name: analyzer
-      sha256: "37577842a27e4338429a1cbc32679d508836510b056f1eedf0c8d20e39c1383d"
+      sha256: "69f54f967773f6c26c7dcb13e93d7ccee8b17a641689da39e878d5cf13b06893"
       url: "https://pub.dev"
     source: hosted
-    version: "6.4.1"
+    version: "6.2.0"
   archive:
     dependency: transitive
     description:
@@ -41,14 +41,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.11.0"
-  auto_route:
-    dependency: transitive
-    description:
-      name: auto_route
-      sha256: "12047baeca0e01df93165ef33275b32119d72699ab9a49dc64c20e78f586f96d"
-      url: "https://pub.dev"
-    source: hosted
-    version: "5.0.4"
   boolean_selector:
     dependency: transitive
     description:
@@ -121,24 +113,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "8.9.1"
-  bundle:
-    dependency: transitive
-    description:
-      path: bundle
-      ref: HEAD
-      resolved-ref: "236f66d37b8e6cd81b00111d4ba61f7b66c30781"
-      url: "https://gitlab.com/fittin/fittin-mobile/modul-app-v2/bundle_gen.git"
-    source: git
-    version: "0.0.2"
-  captcha:
-    dependency: transitive
-    description:
-      path: "."
-      ref: dev
-      resolved-ref: "4af1baa7fcd80cb73b35c8f3c59bcf3e2b11f402"
-      url: "https://gitlab.com/fittin/fittin-mobile/modul-app-v2/captcha.git"
-    source: git
-    version: "1.4.6"
   characters:
     dependency: transitive
     description:
@@ -179,14 +153,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.18.0"
-  compute:
-    dependency: transitive
-    description:
-      name: compute
-      sha256: b70190d59352a267a9765a77b97d0f619874c84d30c5193ae71050ee22ab2ef7
-      url: "https://pub.dev"
-    source: hosted
-    version: "1.0.2"
   convert:
     dependency: transitive
     description:
@@ -204,24 +170,6 @@ packages:
       url: "https://gitlab.com/fittin/fittin-mobile/modul-app-v2/core-interfaces.git"
     source: git
     version: "1.22.38"
-  core_models:
-    dependency: "direct main"
-    description:
-      path: "."
-      ref: dev
-      resolved-ref: "5b39b41c293fa7724d9a3e63aac12f6d1d3da56e"
-      url: "https://gitlab.com/fittin/fittin-mobile/modul-app-v2/core-models.git"
-    source: git
-    version: "1.2.24+1"
-  core_view_utils:
-    dependency: transitive
-    description:
-      path: "."
-      ref: dev
-      resolved-ref: "6a24f564f49671d6925ec220c6ccc39039163fde"
-      url: "https://gitlab.com/fittin/fittin-mobile/modul-app-v2/core-view-utils.git"
-    source: git
-    version: "1.1.17+2"
   crypto:
     dependency: "direct main"
     description:
@@ -278,23 +226,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "5.4.1"
-  easy_debounce:
-    dependency: transitive
-    description:
-      name: easy_debounce
-      sha256: f082609cfb8f37defb9e37fc28bc978c6712dedf08d4c5a26f820fa10165a236
-      url: "https://pub.dev"
-    source: hosted
-    version: "2.0.3"
-  event_bus:
-    dependency: "direct main"
-    description:
-      path: "."
-      ref: dev
-      resolved-ref: "274b1019d813fdd1faf1739df7ea199c69f12daa"
-      url: "https://gitlab.com/fittin/fittin-mobile/modul-app-v2/event-bus.git"
-    source: git
-    version: "1.0.2"
   fake_async:
     dependency: transitive
     description:
@@ -307,10 +238,10 @@ packages:
     dependency: transitive
     description:
       name: ffi
-      sha256: "493f37e7df1804778ff3a53bd691d8692ddf69702cf4c1c1096a2e41b4779e21"
+      sha256: "7bf0adc28a23d395f19f3f1eb21dd7cfd1dd9f8e1c50051c069122e6853bc878"
       url: "https://pub.dev"
     source: hosted
-    version: "2.1.2"
+    version: "2.1.0"
   file:
     dependency: transitive
     description:
@@ -340,14 +271,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "3.0.1"
-  flutter_pdfview:
-    dependency: transitive
-    description:
-      name: flutter_pdfview
-      sha256: a9055bf920c7095bf08c2781db431ba23577aa5da5a056a7152dc89a18fbec6f
-      url: "https://pub.dev"
-    source: hosted
-    version: "1.3.2"
   flutter_secure_storage:
     dependency: transitive
     description:
@@ -463,13 +386,13 @@ packages:
     source: hosted
     version: "2.3.1"
   http:
-    dependency: transitive
+    dependency: "direct overridden"
     description:
       name: http
-      sha256: "761a297c042deedc1ffbb156d6e2af13886bb305c2a343a4d972504cd67dd938"
+      sha256: a2bbf9d017fcced29139daa8ed2bba4ece450ab222871df93ca9eec6f80c34ba
       url: "https://pub.dev"
     source: hosted
-    version: "1.2.1"
+    version: "1.2.0"
   http_multi_server:
     dependency: transitive
     description:
@@ -486,6 +409,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "4.0.2"
+  http_proxy:
+    dependency: "direct overridden"
+    description:
+      name: http_proxy
+      sha256: "7d5bc7ad1b0c6d0cfb5da97c5bfe302082f93d32cf5c67d484d1a4085b3ffa58"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.2.1"
   image:
     dependency: transitive
     description:
@@ -551,30 +482,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "6.7.1"
-  leak_tracker:
-    dependency: transitive
-    description:
-      name: leak_tracker
-      sha256: "78eb209deea09858f5269f5a5b02be4049535f568c07b275096836f01ea323fa"
-      url: "https://pub.dev"
-    source: hosted
-    version: "10.0.0"
-  leak_tracker_flutter_testing:
-    dependency: transitive
-    description:
-      name: leak_tracker_flutter_testing
-      sha256: b46c5e37c19120a8a01918cfaf293547f47269f7cb4b0058f21531c2465d6ef0
-      url: "https://pub.dev"
-    source: hosted
-    version: "2.0.1"
-  leak_tracker_testing:
-    dependency: transitive
-    description:
-      name: leak_tracker_testing
-      sha256: a597f72a664dbd293f3bfc51f9ba69816f84dcd403cdac7066cb3f6003f3ab47
-      url: "https://pub.dev"
-    source: hosted
-    version: "2.0.1"
   lints:
     dependency: transitive
     description:
@@ -595,26 +502,26 @@ packages:
     dependency: transitive
     description:
       name: matcher
-      sha256: d2323aa2060500f906aa31a895b4030b6da3ebdcc5619d14ce1aada65cd161cb
+      sha256: "1803e76e6653768d64ed8ff2e1e67bea3ad4b923eb5c56a295c3e634bad5960e"
       url: "https://pub.dev"
     source: hosted
-    version: "0.12.16+1"
+    version: "0.12.16"
   material_color_utilities:
     dependency: transitive
     description:
       name: material_color_utilities
-      sha256: "0e0a020085b65b6083975e499759762399b4475f766c21668c4ecca34ea74e5a"
+      sha256: "9528f2f296073ff54cb9fee677df673ace1218163c3bc7628093e7eed5203d41"
       url: "https://pub.dev"
     source: hosted
-    version: "0.8.0"
+    version: "0.5.0"
   meta:
     dependency: transitive
     description:
       name: meta
-      sha256: d584fa6707a52763a52446f02cc621b077888fb63b93bbcb1143a7be5a0c0c04
+      sha256: a6e590c838b18133bb482a2745ad77c5bb7715fb0451209e1a7567d416678b8e
       url: "https://pub.dev"
     source: hosted
-    version: "1.11.0"
+    version: "1.10.0"
   mime:
     dependency: transitive
     description:
@@ -631,15 +538,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "3.1.0"
-  navigation:
-    dependency: transitive
-    description:
-      path: "."
-      ref: dev
-      resolved-ref: b96e7e57b723e1f0b77d3873ac9de43217f2d60e
-      url: "https://gitlab.com/fittin/fittin-mobile/modul-app-v2/navigation.git"
-    source: git
-    version: "1.0.106"
   nested:
     dependency: transitive
     description:
@@ -660,10 +558,10 @@ packages:
     dependency: transitive
     description:
       name: path
-      sha256: "087ce49c3f0dc39180befefc60fdb4acd8f8620e5682fe2476afd0b3688bb4af"
+      sha256: "8829d8a55c13fc0e37127c29fedf290c102f4e40ae94ada574091fe0ff96c917"
       url: "https://pub.dev"
     source: hosted
-    version: "1.9.0"
+    version: "1.8.3"
   path_parsing:
     dependency: transitive
     description:
@@ -720,46 +618,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.2.1"
-  permission_handler:
-    dependency: transitive
-    description:
-      name: permission_handler
-      sha256: bc56bfe9d3f44c3c612d8d393bd9b174eb796d706759f9b495ac254e4294baa5
-      url: "https://pub.dev"
-    source: hosted
-    version: "10.4.5"
-  permission_handler_android:
-    dependency: transitive
-    description:
-      name: permission_handler_android
-      sha256: "59c6322171c29df93a22d150ad95f3aa19ed86542eaec409ab2691b8f35f9a47"
-      url: "https://pub.dev"
-    source: hosted
-    version: "10.3.6"
-  permission_handler_apple:
-    dependency: transitive
-    description:
-      name: permission_handler_apple
-      sha256: "99e220bce3f8877c78e4ace901082fb29fa1b4ebde529ad0932d8d664b34f3f5"
-      url: "https://pub.dev"
-    source: hosted
-    version: "9.1.4"
-  permission_handler_platform_interface:
-    dependency: transitive
-    description:
-      name: permission_handler_platform_interface
-      sha256: "6760eb5ef34589224771010805bea6054ad28453906936f843a8cc4d3a55c4a4"
-      url: "https://pub.dev"
-    source: hosted
-    version: "3.12.0"
-  permission_handler_windows:
-    dependency: transitive
-    description:
-      name: permission_handler_windows
-      sha256: cc074aace208760f1eee6aa4fae766b45d947df85bc831cde77009cdb4720098
-      url: "https://pub.dev"
-    source: hosted
-    version: "0.1.3"
   petitparser:
     dependency: transitive
     description:
@@ -808,24 +666,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.3.1"
-  profile:
-    dependency: "direct main"
-    description:
-      path: "."
-      ref: dev
-      resolved-ref: f29adbe5454b4a461310183d6def0dc51999faae
-      url: "https://gitlab.com/fittin/fittin-mobile/modul-app-v2/profile.git"
-    source: git
-    version: "1.4.14"
-  profile_data:
-    dependency: "direct main"
-    description:
-      path: "."
-      ref: dev
-      resolved-ref: "2a68a45cb3877a186dee1becf7db0b2a598693ce"
-      url: "https://gitlab.com/fittin/fittin-mobile/modul-app-v2/profile-data.git"
-    source: git
-    version: "1.2.25"
   protobuf:
     dependency: transitive
     description:
@@ -866,14 +706,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.2.2"
-  recaptcha_enterprise_flutter:
-    dependency: transitive
-    description:
-      name: recaptcha_enterprise_flutter
-      sha256: "8a0db6064e9c9291910efde965933084e08b55fbfb35dffa301c5902f35fcc1c"
-      url: "https://pub.dev"
-    source: hosted
-    version: "18.4.1"
   recase:
     dependency: transitive
     description:
@@ -950,10 +782,10 @@ packages:
     dependency: transitive
     description:
       name: shared_preferences_web
-      sha256: "9aee1089b36bd2aafe06582b7d7817fd317ef05fc30e6ba14bff247d0933042a"
+      sha256: "7b15ffb9387ea3e237bb7a66b8a23d2147663d391cafc5c8f37b2e7b4bde5d21"
       url: "https://pub.dev"
     source: hosted
-    version: "2.3.0"
+    version: "2.2.2"
   shared_preferences_windows:
     dependency: transitive
     description:
@@ -1023,33 +855,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.11.1"
-  strategy_email_login:
-    dependency: transitive
-    description:
-      path: "."
-      ref: HEAD
-      resolved-ref: "5cef5e65906687488de993f3abd7117abbb6e447"
-      url: "https://gitlab.com/fittin/fittin-mobile/modul-app-v2/strategy_email_login.git"
-    source: git
-    version: "1.0.0"
-  strategy_email_password_registration_login:
-    dependency: transitive
-    description:
-      path: "."
-      ref: HEAD
-      resolved-ref: c62bbb3e9e15be0495cc5a657e60ac9bcfeef728
-      url: "https://gitlab.com/fittin/fittin-mobile/modul-app-v2/strategy_email_password_registration_login.git"
-    source: git
-    version: "1.0.0"
-  strategy_sms_registration_login:
-    dependency: transitive
-    description:
-      path: "."
-      ref: HEAD
-      resolved-ref: "28587aea7f2dc34cc7600fc7ef681723430010e1"
-      url: "https://gitlab.com/fittin/fittin-mobile/modul-app-v2/strategy_sms_registration_login.git"
-    source: git
-    version: "1.1.3+4"
   stream_channel:
     dependency: transitive
     description:
@@ -1114,70 +919,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.3.2"
-  url_launcher:
-    dependency: transitive
-    description:
-      name: url_launcher
-      sha256: "0ecc004c62fd3ed36a2ffcbe0dd9700aee63bd7532d0b642a488b1ec310f492e"
-      url: "https://pub.dev"
-    source: hosted
-    version: "6.2.5"
-  url_launcher_android:
-    dependency: transitive
-    description:
-      name: url_launcher_android
-      sha256: d4ed0711849dd8e33eb2dd69c25db0d0d3fdc37e0a62e629fe32f57a22db2745
-      url: "https://pub.dev"
-    source: hosted
-    version: "6.3.0"
-  url_launcher_ios:
-    dependency: transitive
-    description:
-      name: url_launcher_ios
-      sha256: "75bb6fe3f60070407704282a2d295630cab232991eb52542b18347a8a941df03"
-      url: "https://pub.dev"
-    source: hosted
-    version: "6.2.4"
-  url_launcher_linux:
-    dependency: transitive
-    description:
-      name: url_launcher_linux
-      sha256: ab360eb661f8879369acac07b6bb3ff09d9471155357da8443fd5d3cf7363811
-      url: "https://pub.dev"
-    source: hosted
-    version: "3.1.1"
-  url_launcher_macos:
-    dependency: transitive
-    description:
-      name: url_launcher_macos
-      sha256: b7244901ea3cf489c5335bdacda07264a6e960b1c1b1a9f91e4bc371d9e68234
-      url: "https://pub.dev"
-    source: hosted
-    version: "3.1.0"
-  url_launcher_platform_interface:
-    dependency: transitive
-    description:
-      name: url_launcher_platform_interface
-      sha256: "552f8a1e663569be95a8190206a38187b531910283c3e982193e4f2733f01029"
-      url: "https://pub.dev"
-    source: hosted
-    version: "2.3.2"
-  url_launcher_web:
-    dependency: transitive
-    description:
-      name: url_launcher_web
-      sha256: "3692a459204a33e04bc94f5fb91158faf4f2c8903281ddd82915adecdb1a901d"
-      url: "https://pub.dev"
-    source: hosted
-    version: "2.3.0"
-  url_launcher_windows:
-    dependency: transitive
-    description:
-      name: url_launcher_windows
-      sha256: ecf9725510600aa2bb6d7ddabe16357691b6d2805f66216a97d1b881e21beff7
-      url: "https://pub.dev"
-    source: hosted
-    version: "3.1.1"
   uuid:
     dependency: "direct main"
     description:
@@ -1218,14 +959,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.1.4"
-  vm_service:
-    dependency: transitive
-    description:
-      name: vm_service
-      sha256: b3d56ff4341b8f182b96aceb2fa20e3dcb336b9f867bc0eafc0de10f1048e957
-      url: "https://pub.dev"
-    source: hosted
-    version: "13.0.0"
   watcher:
     dependency: transitive
     description:
@@ -1238,50 +971,18 @@ packages:
     dependency: transitive
     description:
       name: web
-      sha256: "1d9158c616048c38f712a6646e317a3426da10e884447626167240d45209cbad"
+      sha256: afe077240a270dcfd2aafe77602b4113645af95d0ad31128cc02bce5ac5d5152
       url: "https://pub.dev"
     source: hosted
-    version: "0.5.0"
+    version: "0.3.0"
   web_socket_channel:
     dependency: transitive
     description:
       name: web_socket_channel
-      sha256: "1d8e795e2a8b3730c41b8a98a2dff2e0fb57ae6f0764a1c46ec5915387d257b2"
+      sha256: d88238e5eac9a42bb43ca4e721edba3c08c6354d4a53063afaa568516217621b
       url: "https://pub.dev"
     source: hosted
-    version: "2.4.4"
-  webview_flutter:
-    dependency: transitive
-    description:
-      name: webview_flutter
-      sha256: "25e1b6e839e8cbfbd708abc6f85ed09d1727e24e08e08c6b8590d7c65c9a8932"
-      url: "https://pub.dev"
-    source: hosted
-    version: "4.7.0"
-  webview_flutter_android:
-    dependency: transitive
-    description:
-      name: webview_flutter_android
-      sha256: "3e5f4e9d818086b0d01a66fb1ff9cc72ab0cc58c71980e3d3661c5685ea0efb0"
-      url: "https://pub.dev"
-    source: hosted
-    version: "3.15.0"
-  webview_flutter_platform_interface:
-    dependency: transitive
-    description:
-      name: webview_flutter_platform_interface
-      sha256: d937581d6e558908d7ae3dc1989c4f87b786891ab47bb9df7de548a151779d8d
-      url: "https://pub.dev"
-    source: hosted
-    version: "2.10.0"
-  webview_flutter_wkwebview:
-    dependency: transitive
-    description:
-      name: webview_flutter_wkwebview
-      sha256: "9bf168bccdf179ce90450b5f37e36fe263f591c9338828d6bf09b6f8d0f57f86"
-      url: "https://pub.dev"
-    source: hosted
-    version: "3.12.0"
+    version: "2.4.0"
   win32:
     dependency: transitive
     description:
@@ -1315,5 +1016,5 @@ packages:
     source: hosted
     version: "3.1.2"
 sdks:
-  dart: ">=3.3.0 <4.0.0"
-  flutter: ">=3.19.0"
+  dart: ">=3.2.6 <4.0.0"
+  flutter: ">=3.16.0"

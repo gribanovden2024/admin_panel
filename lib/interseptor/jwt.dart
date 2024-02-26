@@ -1,6 +1,10 @@
 import 'dart:io' show Platform;
+import 'package:admin_panel/interseptor/profile/teacher_profile/data/teacher_profile_url.dart';
+import 'package:http/http.dart' as http;
 
+// import 'package:dio/browser.dart';
 import 'package:dio/dio.dart';
+
 // import 'package:fittin_demo/util/uuid_manager.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -24,11 +28,11 @@ class JWTInterceptor extends QueuedInterceptor {
       _accessToken = _storage.getString('accessToken');
       _refreshToken = _storage.getString('refreshToken');
     }
-    if (_refreshToken == null) {
-      await _getFreeToken(isInit: true);
-    } else {
-      await _refresh();
-    }
+    // if (_refreshToken == null) {
+    await _getFreeToken(isInit: true);
+    // } else {
+    //   await _refresh();
+    // }
   }
 
   /// Http client.
@@ -82,7 +86,7 @@ class JWTInterceptor extends QueuedInterceptor {
   Future onError(error, handler) async {
     // todo(netos23): fix it
     if ((error.response?.statusCode == 403 ||
-        error.response?.statusCode == 401) &&
+            error.response?.statusCode == 401) &&
         error.requestOptions.path != '/auth/phone/part1') {
       await _refresh();
       final response = await _retry(error.requestOptions);
@@ -100,7 +104,7 @@ class JWTInterceptor extends QueuedInterceptor {
 
     try {
       final response = await _dio.post(
-        '/auth/v1/token/refresh',
+        '/auth/token/refresh',
         data: {'refresh_token': _refreshToken},
       );
       if (response.statusCode == 201 || response.statusCode == 200) {
@@ -127,8 +131,7 @@ class JWTInterceptor extends QueuedInterceptor {
   }
 
   /// Save tokens and cache them.
-  Future<void> _saveTokens(Response response,
-      {bool isFreeToken = false}) async {
+  Future<void> _saveTokens(Response response, {bool isFreeToken = true}) async {
     if (isFreeToken) {
       _accessToken = response.data['access_token'];
       _refreshToken = response.data['refresh_token'];
@@ -144,14 +147,27 @@ class JWTInterceptor extends QueuedInterceptor {
   }
 
   Future<void> _getFreeToken({bool isInit = false}) async {
+    // _dio.httpClientAdapter = BrowserHttpClientAdapter();
     final response = await _dio.post('/auth/token/free',
         data: {'user_uuid': UuidManager.cachedUuid},
         options: Options(
-          headers: {'Authorization': "Basic YXBwOmZpdHRpbmFwcA=="},
+          headers: {
+            'Authorization': "Basic YXBwOmZpdHRpbmFwcA==",
+          },
         ));
-
     if (isInit) {
       await _saveTokens(response, isFreeToken: true);
     }
   }
+
+  // Future<void> _getFreeToken({bool isInit = false}) async {
+  //   final response = await http.post(Uri.parse('https://vsu-stage.fittin.ru/auth/token/free'),
+  //       body: {'user_uuid': UuidManager.cachedUuid},
+  //       headers: {'Authorization': "Basic YXBwOmZpdHRpbmFwcA=="},
+  //       );
+  //   if (isInit) {
+  //     await _saveTokens(response as Response, isFreeToken: true);
+  //   }
+  // }
+
 }

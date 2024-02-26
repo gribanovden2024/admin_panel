@@ -25,6 +25,7 @@ import 'interseptor/startup.dart';
 //   ),);
 // }
 void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
   await UUIDConfigurator.configUuid();
   final environmentRepository = EnvironmentRepository();
   await environmentRepository.init();
@@ -34,7 +35,7 @@ void main() async {
       stageUrl: 'https://vsu-stage.fittin.ru',
       prodUrl: 'https://vsu.fittin.ru',
       testUrl: 'https://vsu-stage.fittin.ru',
-      proxyUrl: '',
+      proxyUrl: 'https://cors-anywhere.herokuapp.com/corsdemo',
       proxyStageUrl: '',
       proxyProdUrl: '',
       proxyTestUrl: '',
@@ -68,23 +69,4 @@ Future<GetIt> configureContainer(Environment environment) async {
   final container = getIt;
   await initServices(environment);
   return container;
-}
-
-void initDio(Dio dio) async {
-  const timeout = Duration(seconds: 30);
-  dio.options
-    ..baseUrl = 'https://vsu-stage.fittin.ru'
-    ..connectTimeout = timeout
-    ..receiveTimeout = timeout
-    ..contentType = 'application/json'
-    ..sendTimeout = timeout;
-  // dio.interceptors.add(PlatformInterceptor());
-  // dio.interceptors.add(UUIDInterceptor());
-
-  dio.interceptors.add(
-    PrettyDioLogger(
-      requestHeader: true,
-      requestBody: true,
-    ),
-  );
 }

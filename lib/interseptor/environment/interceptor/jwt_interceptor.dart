@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
 
-// import 'package:admin_panel/interseptor/profile_manager.dart';
 import 'package:admin_panel/interseptor/profile_manager.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
@@ -11,7 +10,8 @@ import 'dart:io';
 
 /// Interceptor for working with JWT tokens, updating and saving them.
 /// Requires [Dio] to work.
-
+String acses = '';
+String free = '';
 class JWTInterceptor extends Interceptor {
   /// Create instance of [JWTInterceptor].
   JWTInterceptor({
@@ -37,6 +37,8 @@ class JWTInterceptor extends Interceptor {
       aOptions: AndroidOptions(
         encryptedSharedPreferences: true,
       ),
+      webOptions: WebOptions(dbName: 'FlutterEncryptedStorage',
+          publicKey: 'FlutterEncryptedStorage')
     ),
   })  : _dio = dio,
         _useCaching = useCaching,
@@ -131,7 +133,7 @@ class JWTInterceptor extends Interceptor {
         await mutex.protect(() async {
           if (_refreshToken != null) {
             if (_getIncDateTime(_refreshToken!)
-                    .compareTo(_getResponseDateTime(error.response!.headers)) ==
+                .compareTo(_getResponseDateTime(error.response!.headers)) ==
                 -1) {
               await _refresh();
             }
@@ -150,8 +152,8 @@ class JWTInterceptor extends Interceptor {
 
   DateTime _getIncDateTime(String token) {
     return DateTime.fromMillisecondsSinceEpoch(json.decode(utf8
-            .fuse(base64Url)
-            .decode(base64.normalize(token.split('.')[1])))['iat'] *
+        .fuse(base64Url)
+        .decode(base64.normalize(token.split('.')[1])))['iat'] *
         1000);
   }
 
@@ -209,9 +211,15 @@ class JWTInterceptor extends Interceptor {
     required String accessToken,
     required String refreshToken,
   }) async {
+    final sharedPreferences = await SharedPreferences.getInstance();
+    await sharedPreferences.clear();
     _accessToken = accessToken;
     _refreshToken = refreshToken;
+    acses = refreshToken;
+    free = refreshToken;
     if (_useCaching) {
+      await sharedPreferences.setString('accessToken', accessToken);
+      await sharedPreferences.setString('refreshToken', refreshToken);
       await _storage.write(key: 'accessToken', value: accessToken);
       await _storage.write(key: 'refreshToken', value: refreshToken);
     }

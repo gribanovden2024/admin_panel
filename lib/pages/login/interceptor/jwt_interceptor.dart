@@ -1,33 +1,68 @@
-import 'dart:io' show Platform;
+import 'dart:async';
+import 'dart:convert';
 
-import 'package:admin_panel/pages/login/interceptor/uuid_manager.dart';
+import 'package:admin_panel/interseptor/profile_manager.dart';
 import 'package:dio/dio.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:mutex/mutex.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'dart:io';
 
 /// Interceptor for working with JWT tokens, updating and saving them.
 /// Requires [Dio] to work.
 
-class JWTInterceptor extends QueuedInterceptor {
+class JWTInterceptor extends Interceptor {
   /// Create instance of [JWTInterceptor].
   JWTInterceptor({
     required Dio dio,
+    required IProfile profile,
     bool useCaching = true,
+    List<String> authUrls = const [
+      '/auth/v1/phone/part2',
+      '/auth/token/free',
+      '/auth/v1/email_password/auth',
+      '/auth/v1/email_password/register',
+      '/auth/v1/social/auth',
+      '/auth/social/',
+      '/auth/token/free',
+      '/auth/phone/part2',
+      '/auth/login',
+      '/auth/email/part2',
+    ],
+    String refreshUrl = '/auth/token/refresh',
+    String freeTokenUrl = '/auth/token/free',
+    String freeTokenAuthToken = 'YXBwOmZpdHRpbmFwcA==',
+    FlutterSecureStorage storage = const FlutterSecureStorage(
+      aOptions: AndroidOptions(
+        encryptedSharedPreferences: true,
+      ),
+    ),
   })  : _dio = dio,
-        _useCaching = useCaching;
+        _useCaching = useCaching,
+        _authUrls = authUrls,
+        _refreshUrl = refreshUrl,
+        _freeTokenUrl = freeTokenUrl,
+        _freeTokenBasicToken = freeTokenAuthToken,
+        _profile = profile,
+        _storage = storage;
 
   /// Getting tokens from cache.
   Future<void> initTokens() async {
-    if (_useCaching) {
-      final _storage = await SharedPreferences.getInstance();
-      _accessToken = _storage.getString('accessToken');
-      _refreshToken = _storage.getString('refreshToken');
+    final sharedPreferences = await SharedPreferences.getInstance();
+    if (sharedPreferences.getBool('first_run') ?? true) {
+      await _storage.deleteAll();
+      sharedPreferences.setBool('first_run', false);
     }
-    if (_refreshToken == null) {
-      await _getFreeToken(isInit: true);
-    } else {
-      await _refresh();
+
+    _accessToken = await _storage.read(key: 'accessToken');
+    _refreshToken = await _storage.read(key: 'refreshToken');
+    if (_accessToken == null || _refreshToken == null) {
+      await _profile.updateFreeToken();
     }
   }
+
+  /// Tokens mutex.
+  final mutex = Mutex();
 
   /// Http client.
   final Dio _dio;
@@ -38,74 +73,118 @@ class JWTInterceptor extends QueuedInterceptor {
   /// JWT refresh token.
   String? _refreshToken;
 
+  /// Url for refresh request.
+  final String _refreshUrl;
+
+  /// Url for free token request.
+  final String _freeTokenUrl;
+
+  /// Token for free token basic authorization.
+  final String _freeTokenBasicToken;
+
+  /// Urls with tokens in response.
+  final List<String> _authUrls;
+
+  /// Profile module
+  final IProfile _profile;
+
   /// Client for working with cache.
-  // final FlutterSecureStorage _storage = const FlutterSecureStorage(
-  //     aOptions: AndroidOptions(
-  //   encryptedSharedPreferences: true,
-  // ));
+  final FlutterSecureStorage _storage;
 
   /// Use to enable/disable token caching. Default value is true
   final bool _useCaching;
 
   /// Add JWT authorization token to any request, if available.
   @override
-  void onRequest(options, handler) {
+  Future<void> onRequest(options, handler) async {
     if (_accessToken != null) {
       options.headers['Authorization'] = 'Bearer $_accessToken';
     }
 
-    if (options.uri.path == '/auth/v1/token/free') {
-      options.headers['Authorization'] = 'Basic YXBwOmZpdHRpbmFwcA==';
+    if (options.path == _freeTokenUrl) {
+      options.headers['Authorization'] = 'Basic $_freeTokenBasicToken';
     }
-    options.headers['ostype'] = Platform.isIOS ? 'ios' : 'android';
 
     return super.onRequest(options, handler);
   }
 
   /// Save tokens received after authorization.
   @override
-  void onResponse(Response response, ResponseInterceptorHandler handler) async {
-    if (response.requestOptions.path == '/auth/v1/phone/part2') {
-      await _saveTokens(response);
-    }
-
-    if (response.requestOptions.path == '/auth/v1/token/free') {
-      await _saveTokens(response, isFreeToken: true);
+  Future<void> onResponse(
+      Response response, ResponseInterceptorHandler handler) async {
+    if (_authUrls.contains(response.requestOptions.path)) {
+      await _saveTokens(
+        accessToken: response.data['access_token'],
+        refreshToken: response.data['refresh_token'],
+      );
     }
     super.onResponse(response, handler);
   }
 
   /// Update JWT token if it is outdated.
   @override
-  Future onError(error, handler) async {
-    // todo(netos23): fix it
-    if ((error.response?.statusCode == 403 ||
-            error.response?.statusCode == 401) &&
-        error.requestOptions.path != '/auth/v1/phone/part1') {
-      await _refresh();
-      final response = await _retry(error.requestOptions);
-      handler.resolve(response);
+  Future<void> onError(error, handler) async {
+    try {
+      if (error.response?.statusCode == 401 &&
+          error.requestOptions.path != _refreshUrl) {
+        await mutex.protect(() async {
+          if (_refreshToken != null) {
+            if (_getIncDateTime(_refreshToken!)
+                .compareTo(_getResponseDateTime(error.response!.headers)) ==
+                -1) {
+              await _refresh();
+            }
+          } else {
+            await _profile.updateFreeToken();
+          }
+        });
+        final response = await _retry(error.requestOptions);
+        return handler.resolve(response);
+      }
+    } catch (_) {
+      return handler.reject(error);
     }
-    return super.onError(error, handler);
+    return handler.next(error);
+  }
+
+  DateTime _getIncDateTime(String token) {
+    return DateTime.fromMillisecondsSinceEpoch(json.decode(utf8
+        .fuse(base64Url)
+        .decode(base64.normalize(token.split('.')[1])))['iat'] *
+        1000);
+  }
+
+  DateTime _getResponseDateTime(Headers headers) {
+    return HttpDate.parse(headers['date']!.first);
+  }
+
+  Future<void> clearTokens() async {
+    _accessToken = null;
+    _refreshToken = null;
+    if (_useCaching) {
+      await _storage.write(key: 'accessToken', value: null);
+      await _storage.write(key: 'refreshToken', value: null);
+    }
   }
 
   /// Make a request to update the JWT token and save it to cache.
   Future<void> _refresh() async {
-    if (_refreshToken == null) {
-      await _getFreeToken();
-      return;
-    }
-
-    try {
-      final response = await _dio.post(
-        '/auth/v1/token/refresh',
-        data: {'refresh_token': _refreshToken},
+    Response<dynamic>? response = await _dio.post(
+      _refreshUrl,
+      data: {'refresh_token': _refreshToken},
+      options: Options(
+        validateStatus: (status) {
+          return status != null && status < 500;
+        },
+      ),
+    );
+    if (response.statusCode == 201 || response.statusCode == 200) {
+      await _saveTokens(
+        accessToken: response.data['access_token'],
+        refreshToken: response.data['refresh_token'],
       );
-      if (response.statusCode == 201 || response.statusCode == 200) {
-        await _saveTokens(response);
-      }
-    } catch (e) {
-      await _getFreeToken();
+    } else {
+      await _profile.updateFreeToken();
     }
   }
 
@@ -125,33 +204,15 @@ class JWTInterceptor extends QueuedInterceptor {
   }
 
   /// Save tokens and cache them.
-  Future<void> _saveTokens(Response response,
-      {bool isFreeToken = false}) async {
-    if (isFreeToken) {
-      _accessToken = response.data['access_token'];
-      _refreshToken = response.data['refresh_token'];
-    } else {
-      _accessToken = response.data['data']['access_token'];
-      _refreshToken = response.data['data']['refresh_token'];
-    }
+  Future<void> _saveTokens({
+    required String accessToken,
+    required String refreshToken,
+  }) async {
+    _accessToken = accessToken;
+    _refreshToken = refreshToken;
     if (_useCaching) {
-      final _storage = await SharedPreferences.getInstance();
-      await _storage.setString('accessToken', _accessToken!);
-      await _storage.setString('refreshToken', _refreshToken!);
-    }
-  }
-
-  Future<void> _getFreeToken({bool isInit = false}) async {
-    final response = await _dio.post('/auth/v1/token/free',
-        data: {'user_uuid': UuidManager.cachedUuid},
-        options: Options(
-          headers: {
-            'Authorization': 'Basic YXBwOmZpdHRpbmFwcA==',
-          },
-        ));
-
-    if (isInit) {
-      await _saveTokens(response, isFreeToken: true);
+      await _storage.write(key: 'accessToken', value: accessToken);
+      await _storage.write(key: 'refreshToken', value: refreshToken);
     }
   }
 }

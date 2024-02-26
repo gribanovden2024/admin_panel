@@ -9,25 +9,14 @@ class UUIDConfigurator {
   static late String uuid;
 
   @deprecated
-  static Future<void> configUuid() async {
-    uuid = await _getUuid();
-  }
+  static Future<void> configUuid() async => uuid = await _getUuid();
 
   @deprecated
   static Future<String> _getUuid() async {
     final sharedPreferences = await SharedPreferences.getInstance();
-
     var uuid = sharedPreferences.getString(uuidKey);
     if (uuid == null) {
-      // final deviceId = await _getDeviceId();
-      uuid = const Uuid().v4(
-        // options: {
-        //   'rng': UuidUtil.mathRNG,
-        //   'namedArgs': {
-        //     const Symbol('seed'): deviceId.hashCode,
-        //   }
-        // },
-      );
+      uuid = const Uuid().v4();
       await sharedPreferences.setString(uuidKey, uuid);
     }
     return uuid;

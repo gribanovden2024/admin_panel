@@ -30,4 +30,5 @@ abstract class TeacherProfileService {
   @POST(TeacherProfileUrl.freeToken)
   Future<FreeTokenDto> postTokenFree(
       {@Body() required TokenFreeRequestDto request});
+
 }

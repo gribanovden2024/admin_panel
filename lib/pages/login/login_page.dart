@@ -59,7 +59,9 @@ class LoginPage extends StatelessWidget {
                       suffixIcon: Padding(
                         padding: EdgeInsets.only(right: defaultPadding*0.4),
                         child: ElevatedButton(
-                          onPressed: () {presenter.getCode(controller1.text);},
+                          onPressed: () async {
+                            await presenter.initDio();
+                            await presenter.emailRequest(controller1.text);},
                           style: ButtonStyle(
                               shape: MaterialStatePropertyAll(RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(10.0),

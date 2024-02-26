@@ -2,7 +2,6 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:admin_panel/interseptor/environment/event_bus/event_bus.dart';
-// import 'package:admin_panel/interseptor/environment/interceptor/jwt_interceptor.dart';
 import 'package:admin_panel/interseptor/profile/service/profile_service.dart';
 import 'package:admin_panel/interseptor/profile/teacher_profile/data/teacher_profile_repository.dart';
 import 'package:admin_panel/interseptor/profile/teacher_profile/data/teacher_profile_service.dart';
@@ -11,15 +10,16 @@ import 'package:admin_panel/interseptor/profile/user_data.dart';
 import 'package:admin_panel/interseptor/profile_manager.dart';
 import 'package:admin_panel/interseptor/profile_repository.dart';
 import 'package:crypto/crypto.dart';
+// import 'package:dio/browser.dart';
 import 'package:dio/dio.dart';
 import 'package:pretty_dio_logger/pretty_dio_logger.dart';
 import '../pages/login/data/uuid_configurator.dart';
 import '../pages/login/interceptor/uuid_manager.dart';
 import 'configure_dependencies.dart';
 import 'package:injectable/injectable.dart' hide Environment;
-
 import 'environment.dart';
-import 'jwt.dart';
+// import 'jwt.dart';
+import 'package:admin_panel/interseptor/environment/interceptor/jwt_interceptor.dart';
 
 class BasicInterceptor extends Interceptor {
   @override
@@ -32,7 +32,7 @@ class BasicInterceptor extends Interceptor {
 Future<void> initServices(Environment environment) async {
   final profile = getIt.get<IProfile<UserData>>();
   final dio = RegisterModules._dio;
-  initDio(environment: environment, dio: dio, additionalInterceptors: []);
+  initDio(environment: environment, dio: dio);
 
   // dio.interceptors.add(
   //   PrettyDioLogger(
@@ -41,24 +41,23 @@ Future<void> initServices(Environment environment) async {
   //   ),
   // );
 
-  // final jwtInterceptor = JWTInterceptor(
-  //   dio: dio,
-  //   profile: profile,
-  //   freeTokenUrl: '/auth/token/free',
-  //   refreshUrl: '/auth/token/refresh',
-  // );
+  final jwtInterceptor = JWTInterceptor(
+    dio: dio,
+    profile: profile,
+  );
+  // final jwtInterceptor = JWTInterceptor(dio: dio);
 
-  final jwtInterceptor = JWTInterceptor(dio: dio);
-  // dio.interceptors.add(
-  //   SecureMethodInterceptor(
-  //     endpoints: [
-  //       '/auth/email/part1',
-  //       '/auth/token/free',
-  //       '/attendance/confirm_attendance/'
-  //     ],
-  //     dio: dio,
-  //   ),
-  // );
+  dio.interceptors.add(
+    SecureMethodInterceptor(
+      endpoints: [
+        '/auth/email/part1',
+        '/auth/token/free',
+        '/attendance/confirm_attendance/',
+        '/attendance/get_net_attendance/'
+      ],
+      dio: dio,
+    ),
+  );
 
   await UuidManager.initUUID();
   await jwtInterceptor.initTokens();
@@ -66,33 +65,27 @@ Future<void> initServices(Environment environment) async {
 
 
 
-  (profile as Profile<UserData>).init();
-  await RegisterModules._teacherProfileManager.init();
-  RegisterModules._eventBus.init();
+  // (profile as Profile<UserData>).init();
+  // await RegisterModules._teacherProfileManager.init();
+  // RegisterModules._eventBus.init();
 }
 
 void initDio({
-  Iterable<Interceptor>? additionalInterceptors,
   Environment? environment,
   required Dio dio,
 }) {
-  const timeout = Duration(seconds: 30);
-
   dio.options
-    ..baseUrl = environment?.config.baseUrl ?? ''
-    ..connectTimeout = timeout
-    ..receiveTimeout = timeout
-    ..contentType = 'application/json'
-    ..sendTimeout = timeout;
+    ..baseUrl = environment?.config.baseUrl ?? '';
 
-  if (additionalInterceptors != null) {
-    dio.interceptors.addAll(additionalInterceptors);
-  }
+  // if (additionalInterceptors != null) {
+  //   dio.interceptors.addAll(additionalInterceptors);
+  // }
 
   // dio.interceptors.add(PlatformInterceptor());
-  dio.interceptors.add(UUIDInterceptor());
+  // dio.interceptors.add(UUIDInterceptor());
 
 
+  // dio.httpClientAdapter = BrowserHttpClientAdapter();
   dio.interceptors.add(PrettyDioLogger(
       requestHeader: true,
       requestBody: true,
@@ -221,13 +214,13 @@ class SecureMethodInterceptor extends Interceptor {
 
   Future<DateTime> _getTimeFromWeb() async {
     /// время по Гринвичу
-    try {
-      final resp = await dio.get(
-          'https://worldtimeapi.org/api/timezone/Etc/UTC');
-      final dateTime = resp.data["datetime"];
-      return DateTime.parse(dateTime);
-    } catch (e){
+    // try {
+    //   final resp = await dio.get(
+    //       'https://worldtimeapi.org/api/timezone/Etc/UTC');
+    //   final dateTime = resp.data["datetime"];
+    //   return DateTime.parse(dateTime);
+    // } catch (e){
       return DateTime.now();
-    }
+    // }
   }
 }
