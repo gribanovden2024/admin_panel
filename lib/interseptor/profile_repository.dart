@@ -3,12 +3,14 @@ import 'package:admin_panel/interseptor/profile/login_status.dart';
 import 'package:admin_panel/interseptor/profile/model/auth_request.dart';
 import 'package:admin_panel/interseptor/profile/model/auth_response.dart';
 import 'package:admin_panel/interseptor/profile/service/profile_service.dart';
+import 'package:admin_panel/interseptor/profile/teacher_profile/data/dto/free_token_dto.dart';
 import 'package:admin_panel/interseptor/profile/teacher_profile/data/dto/token_free_request_dto.dart';
 import 'package:admin_panel/interseptor/profile/user_data.dart';
 import 'package:dio/dio.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:uuid/uuid.dart';
-
+String accessToken ='';
+String refreshToken ='';
 abstract class IProfileRepository<T extends IUserData> {
   Future<T> updateProfileInfo({
     required T request,
@@ -97,11 +99,13 @@ class ProfileRepository implements IProfileRepository<UserData> {
     // try {
       final uuid = await _getUuid();
       print('uuid = $uuid');
-      await _service.postTokenFree(
+      FreeTokenDto response = await _service.postTokenFree(
         request: TokenFreeRequestDto(
           userUuid: uuid,
         ),
       );
+      accessToken = response.accessToken ?? '';
+      refreshToken = response.refreshToken ?? '';
     // } catch (e) {
     //   print(e);
     //   rethrow;

@@ -8,14 +8,34 @@ import '../../controllers/MenuAppController.dart';
 import '../home/home_page.dart';
 import 'login_data.dart';
 
-class LoginPage extends StatelessWidget {
+class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
+
+  @override
+  State<LoginPage> createState() => _LoginPageState();
+}
+
+class _LoginPageState extends State<LoginPage> {
+  final presenter = LoginData();
+  bool isVisible = false;
+  String email = '';
+
+  Future<void> _sendEmail(String t) async {
+    await presenter.initDio();
+    isVisible = await presenter.emailRequest(t);
+    email = t;
+    setState(() => isVisible);
+  }
+  Future<bool> _confirmEmail(String t) async {
+    await presenter.initDio();
+    return await presenter.confirmEmailCode(email, t);
+  }
   @override
   Widget build(BuildContext context) {
     TextEditingController controller1 = TextEditingController();
     TextEditingController controller2 = TextEditingController();
-    void login() {
-      if (controller2.text == '123456') {
+    Future<void> login(String t) async {
+      if (controller2.text == '123456' || await _confirmEmail(t)) {
         Navigator.push(
           context,
           MaterialPageRoute(builder: (context) => MultiProvider(
@@ -29,7 +49,6 @@ class LoginPage extends StatelessWidget {
         );
       }
     }
-    final presenter = LoginData();
     return Scaffold(
       body: Center(
         child: Column(
@@ -59,9 +78,7 @@ class LoginPage extends StatelessWidget {
                       suffixIcon: Padding(
                         padding: EdgeInsets.only(right: defaultPadding*0.4),
                         child: ElevatedButton(
-                          onPressed: () async {
-                            await presenter.initDio();
-                            await presenter.emailRequest(controller1.text);},
+                          onPressed: () async => await _sendEmail(controller1.text),
                           style: ButtonStyle(
                               shape: MaterialStatePropertyAll(RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(10.0),
@@ -79,7 +96,7 @@ class LoginPage extends StatelessWidget {
                     keyboardType: TextInputType.number,
                     inputFormatters: [FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),],
                     maxLength: 6,
-                    onEditingComplete: login,
+                    onEditingComplete: () async => await login(controller2.text),
                     decoration: InputDecoration(
                       hintText: 'code',
                       fillColor: secondaryColor,
@@ -91,7 +108,7 @@ class LoginPage extends StatelessWidget {
                       suffixIcon: Padding(
                         padding: EdgeInsets.only(right: defaultPadding*0.4),
                         child: ElevatedButton(
-                          onPressed: login,
+                          onPressed: () async => await login(controller2.text),
                           style: ButtonStyle(
                               shape: MaterialStatePropertyAll(RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(10.0),
@@ -104,6 +121,7 @@ class LoginPage extends StatelessWidget {
                 ],
               ),
             ),
+            isVisible ?Text('The code has been sent to $email',style: TextStyle(color: Colors.green),) : Container(),
           ],
         ),
       ),
