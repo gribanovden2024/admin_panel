@@ -6,10 +6,7 @@ import 'package:dio/dio.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:uuid/uuid.dart';
 
-import '../../interseptor/environment/interceptor/jwt_interceptor.dart';
-import '../../interseptor/profile/login_status.dart';
-import 'dto/email_part1_request/email_part1_request.dart';
-import 'dto/email_part2_request/email_part2_request.dart';
+import 'package:admin_panel/interseptor/environment/interceptor/jwt_interceptor.dart';
 import 'dto/token_free_request_dto.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
@@ -45,9 +42,10 @@ class LoginData {
     Response response = await dio.post(
         'https://vsu-stage.fittin.ru' + TeacherProfileUrl.emailPart2,
         data: {"email": "$email", "code": "$code"});
-    if (response.statusCode == 200/*|| response.statusCode == 400*/)
+    if (response.statusCode == 200/*|| response.statusCode == 400*/) {
+      accessToken = response.data['access_token'];
       return true;
-    else return false;
+    } else return false;
   }
 
   Future<void> getFreeToken() async {
