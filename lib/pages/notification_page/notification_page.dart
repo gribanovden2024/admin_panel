@@ -7,21 +7,33 @@ import 'notification_data.dart';
 
 class NotificationPage extends StatelessWidget {
   const NotificationPage({super.key});
+
   @override
   Widget build(BuildContext context) {
     final presenter = NotificationData();
+    TextEditingController controller1 = TextEditingController();
+    TextEditingController controller2 = TextEditingController();
+
     Future<void> getgroups() async {
       presenter.initDio();
-      List<Map<String, dynamic>> list =[];
+      List<Map<String, dynamic>> list = [];
       Response? groups = await presenter.getGroups();
-      // Response? notification = await presenter.getNotifications();
-      Response? notificationList = await presenter.getNotificationList();
       print(groups!.data);
-      // print(notification!.data);
-      print(notificationList!.data);
-      for (int i = 0; i < groups!.data.length; i++)
-        list.addAll(groups!.data);
+      for (int i = 0; i < groups!.data.length; i++) list.addAll(groups!.data);
     }
+
+    Future<void> getnotifications() async {
+      presenter.initDio();
+      Response? notificationList = await presenter.getNotificationList();
+      print(notificationList!.data);
+    }
+
+    Future<void> postnotifications(String id, String message) async {
+      presenter.initDio();
+      Response? notificationList = await presenter.postNotifications(id,message);
+      print(notificationList!.data);
+    }
+
     return Container(
         padding: EdgeInsets.symmetric(horizontal: defaultPadding),
         decoration: const BoxDecoration(
@@ -29,11 +41,11 @@ class NotificationPage extends StatelessWidget {
             color: Colors.blueGrey),
         child: Column(children: [
           SizedBox(height: defaultPadding),
-          ImputsField(text: 'ID Groups'),
+          ImputsField(text: 'ID Groups', controller: controller1),
           ImputsField(text: 'Course'),
           ImputsField(text: 'Number'),
           ImputsField(text: 'Sub Number'),
-          ImputsField(text: 'Message'),
+          ImputsField(text: 'Message', controller: controller2),
           ImputsField(
               text:
                   'Images url (https://flyclipart.com/thumb2/alarma-icon-496777.png)'),
@@ -42,7 +54,35 @@ class NotificationPage extends StatelessWidget {
             children: [
               const Spacer(),
               ElevatedButton(
-                onPressed: () {getgroups();},
+                onPressed: () {
+                  getgroups();
+                },
+                style: ButtonStyle(
+                    shape: MaterialStatePropertyAll(RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10.0),
+                        side: BorderSide(color: borderColor!)))),
+                child: const Text(
+                  'Enter',
+                  style: defStyle,
+                ),
+              ),
+              ElevatedButton(
+                onPressed: () {
+                  getnotifications();
+                },
+                style: ButtonStyle(
+                    shape: MaterialStatePropertyAll(RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10.0),
+                        side: BorderSide(color: borderColor!)))),
+                child: const Text(
+                  'Enter',
+                  style: defStyle,
+                ),
+              ),
+              ElevatedButton(
+                onPressed: () {
+                  postnotifications(controller1.text,controller2.text);
+                },
                 style: ButtonStyle(
                     shape: MaterialStatePropertyAll(RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(10.0),

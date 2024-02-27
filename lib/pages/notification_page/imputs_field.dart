@@ -5,8 +5,8 @@ import '../../constants.dart';
 
 class ImputsField extends StatelessWidget {
   String text;
-
-  ImputsField({required this.text,
+  TextEditingController? controller;
+  ImputsField({required this.text, this.controller,
     super.key,
   });
 
@@ -14,6 +14,7 @@ class ImputsField extends StatelessWidget {
   Widget build(BuildContext context) => Column(
     children: [
       TextField(
+        controller: controller ?? null,
         decoration: InputDecoration(
           hintText: text,
           fillColor: secondaryColor,

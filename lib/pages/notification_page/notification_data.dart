@@ -22,21 +22,40 @@ class NotificationData {
     )
     );
   }
+
   Future<Response?> getGroups() async {
     Response response = await dio.get('/admin_panel/groups_list');
-    if (response.statusCode == 200/*|| response.statusCode == 400*/)
+    if (response.statusCode == 200 /*|| response.statusCode == 400*/)
       return response;
-    else return null;
+    else
+      return null;
   }
+
   Future<Response?> getNotifications() async {
-    Response response = await dio.get('/admin_panel/notification');
-    if (response.statusCode == 200/*|| response.statusCode == 400*/)
+    Response response = await dio.get(
+        '/admin_panel/notification', data: {'id': '11'});
+    if (response.statusCode == 200 /*|| response.statusCode == 400*/)
       return response;
-    else return null;
-  }Future<Response?> getNotificationList() async {
+    else
+      return null;
+  }
+
+  Future<Response?> getNotificationList() async {
     Response response = await dio.get('/admin_panel/notification_list');
-    if (response.statusCode == 200/*|| response.statusCode == 400*/)
+    if (response.statusCode == 200 /*|| response.statusCode == 400*/)
       return response;
-    else return null;
+    else
+      return null;
+  }
+
+  Future<Response?> postNotifications(String id, String message) async {
+    dio.options.contentType = 'application/json';
+    Response response = await dio.post('/admin_panel/notification',
+      data: {'id': id,
+        'message': message},);
+    if (response.statusCode == 200 /*|| response.statusCode == 400*/)
+      return response;
+    else
+      return null;
   }
 }
