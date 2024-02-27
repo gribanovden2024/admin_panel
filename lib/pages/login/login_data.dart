@@ -1,3 +1,5 @@
+import 'package:admin_panel/interseptor/profile/teacher_profile/data/teacher_profile_url.dart';
+import 'package:admin_panel/pages/login/dto/free_token_dto.dart';
 import 'package:admin_panel/pages/login/teacher_profile/teacher_profile_service.dart';
 import 'package:dio/dio.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -12,46 +14,44 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 class LoginData {
   FlutterSecureStorage storage = const FlutterSecureStorage(
-      aOptions: AndroidOptions(
-        encryptedSharedPreferences: true,
-      ),
-      webOptions: WebOptions(dbName: 'FlutterEncryptedStorage',
-          publicKey: 'FlutterEncryptedStorage')
-  );
+      aOptions: AndroidOptions(encryptedSharedPreferences: true),
+      webOptions: WebOptions(
+          dbName: 'FlutterEncryptedStorage',
+          publicKey: 'FlutterEncryptedStorage'));
   static Dio dio = Dio();
+
   Future<void> initDio() async {
-    final sharedPreferences = await SharedPreferences.getInstance();
-    var _accessToken = sharedPreferences.getString('accessToken');
-    // var _accessToken = await storage.read(key: 'accessToken');
-    var _refreshToken = sharedPreferences.getString('refreshToken');
-    dio.options.headers['Authorization'] = '11Bearer $acses';
+    // getFreeToken();
+    dio.options.headers['Authorization'] = 'Bearer $acses';
   }
+
   final TeacherProfileService _service = TeacherProfileService(dio);
 
   Future<void> getCode(String email) async {
     await _service.part1Email(request: '{"email":"$email"}');
   }
 
-  Future<LoginStatus> emailRequest(String email) async {
-    await _service.part1Email(request: '{"email":"$email"}');
-    return LoginStatus(
-      loginRequired: true,
-      isAuthorized: false,
-    );
+  Future<bool> emailRequest(String email) async {
+    Response response = await dio.post(
+        'https://vsu-stage.fittin.ru' + TeacherProfileUrl.emailPart1,
+        data: {"email": "$email"});
+    if (response.statusCode == 200 || response.statusCode == 400)
+      return true;
+    else
+      return false;
   }
 
   Future<void> confirmEmailCode(String email, String code) async {
-    await _service.part2Email(
-        request: EmailPart2Request(email: email, code: code));
-    // return LoginStatus(
-    //   loginRequired: true,
-    //   isAuthorized: false,
-    // );
+    Response response = await dio.post(
+        'https://vsu-stage.fittin.ru' + TeacherProfileUrl.emailPart2,
+        data: {"email": "$email", "code": "$code"});
   }
 
   Future<void> getFreeToken() async {
     final uuid = await _getUuid();
-    await _service.postTokenFree(request: TokenFreeRequestDto(userUuid: uuid));
+    FreeTokenDto token = await _service.postTokenFree(
+        request: TokenFreeRequestDto(userUuid: uuid));
+    acses = token.accessToken!;
   }
 
   Future<String> _getUuid() async {

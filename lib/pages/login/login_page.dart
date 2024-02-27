@@ -8,12 +8,41 @@ import '../../controllers/MenuAppController.dart';
 import '../home/home_page.dart';
 import 'login_data.dart';
 
-class LoginPage extends StatelessWidget {
+class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
+
+  @override
+  State<LoginPage> createState() => _LoginPageState();
+}
+
+class _LoginPageState extends State<LoginPage> {
+  bool isVisible = false;
+
+  void toggleVisibility() {
+    setState(() {
+      isVisible = !isVisible;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     TextEditingController controller1 = TextEditingController();
     TextEditingController controller2 = TextEditingController();
+    final presenter = LoginData();
+    Future<void> _sendEmail() async {
+      await presenter.initDio();
+      bool isVisible = await presenter.emailRequest(controller1.text);
+      setState(() {
+        isVisible;
+      });
+    }
+    Future<void> _confirmEmail() async {
+      await presenter.initDio();
+      await presenter.confirmEmailCode(controller1.text,controller2.text);
+      setState(() {
+        isVisible;
+      });
+    }
     void login() {
       if (controller2.text == '123456') {
         Navigator.push(
@@ -28,8 +57,8 @@ class LoginPage extends StatelessWidget {
           ),),
         );
       }
+      _confirmEmail();
     }
-    final presenter = LoginData();
     return Scaffold(
       body: Center(
         child: Column(
@@ -60,8 +89,8 @@ class LoginPage extends StatelessWidget {
                         padding: EdgeInsets.only(right: defaultPadding*0.4),
                         child: ElevatedButton(
                           onPressed: () async {
-                            await presenter.initDio();
-                            await presenter.emailRequest(controller1.text);},
+                            _sendEmail();
+                          },
                           style: ButtonStyle(
                               shape: MaterialStatePropertyAll(RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(10.0),
@@ -104,6 +133,7 @@ class LoginPage extends StatelessWidget {
                 ],
               ),
             ),
+            isVisible ? Text('Текст, который будет виден') : Container(),
           ],
         ),
       ),
