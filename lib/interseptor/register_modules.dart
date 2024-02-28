@@ -1,6 +1,5 @@
 import 'dart:convert';
 import 'dart:io';
-
 import 'package:admin_panel/interseptor/environment/event_bus/event_bus.dart';
 import 'package:admin_panel/interseptor/profile/service/profile_service.dart';
 import 'package:admin_panel/interseptor/profile/teacher_profile/data/teacher_profile_repository.dart';
@@ -9,12 +8,11 @@ import 'package:admin_panel/interseptor/profile/teacher_profile/teacher_profile_
 import 'package:admin_panel/interseptor/profile/user_data.dart';
 import 'package:admin_panel/interseptor/profile_manager.dart';
 import 'package:admin_panel/interseptor/profile_repository.dart';
+import 'package:admin_panel/interseptor/uuid_configurator.dart';
 import 'package:crypto/crypto.dart';
-// import 'package:dio/browser.dart';
 import 'package:dio/dio.dart';
 import 'package:pretty_dio_logger/pretty_dio_logger.dart';
-import '../pages/login/data/uuid_configurator.dart';
-import '../pages/login/interceptor/uuid_manager.dart';
+import 'uuid_manager.dart';
 import 'configure_dependencies.dart';
 import 'package:injectable/injectable.dart' hide Environment;
 import 'environment.dart';
@@ -100,7 +98,7 @@ class PlatformInterceptor extends Interceptor {
   @override
   void onRequest(RequestOptions options, RequestInterceptorHandler handler) {
     String t = Platform.operatingSystem;
-    print(t);
+    print('Platform.operatingSystem = $t');
     options.headers['X-Client-OS'] = Platform.isIOS ? 'ios' : 'android';
     return super.onRequest(options, handler);
   }

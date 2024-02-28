@@ -1,5 +1,4 @@
 import 'package:admin_panel/interseptor/profile/model/auth_response.dart';
-import 'package:admin_panel/interseptor/profile/teacher_profile/data/dto/email_part1_request.dart';
 import 'package:admin_panel/interseptor/profile/teacher_profile/data/dto/email_part2_request.dart';
 import 'package:admin_panel/interseptor/profile/teacher_profile/data/dto/free_token_dto.dart';
 import 'package:admin_panel/interseptor/profile/teacher_profile/data/dto/teacher_info_response.dart';
@@ -18,7 +17,7 @@ abstract class TeacherProfileService {
 
   @POST(TeacherProfileUrl.emailPart1)
   Future<void> part1Email({
-    @Body() required EmailPart1Request request,
+    @Body() required String request,
   });
 
   @POST(TeacherProfileUrl.emailPart2)

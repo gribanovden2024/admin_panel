@@ -19,7 +19,7 @@ class _TeacherProfileService implements TeacherProfileService {
   String? baseUrl;
 
   @override
-  Future<void> part1Email({required EmailPart1Request request}) async {
+  Future<void> part1Email({required String request}) async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};

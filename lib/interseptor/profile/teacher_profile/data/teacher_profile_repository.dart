@@ -1,6 +1,5 @@
 import 'package:admin_panel/interseptor/event/error_event.dart';
 import 'package:admin_panel/interseptor/profile/login_status.dart';
-import 'package:admin_panel/interseptor/profile/teacher_profile/data/dto/email_part1_request.dart';
 import 'package:admin_panel/interseptor/profile/teacher_profile/data/dto/email_part2_request.dart';
 import 'package:admin_panel/interseptor/profile/teacher_profile/data/dto/token_free_request_dto.dart';
 import 'package:admin_panel/interseptor/profile/teacher_profile/data/teacher_profile_service.dart';
@@ -14,7 +13,7 @@ class TeacherProfileRepository {
   final TeacherProfileService _service;
 
   Future<LoginStatus> emailRequest(String email) async {
-    await _service.part1Email(request: EmailPart1Request(email: email));
+    await _service.part1Email(request: email);
     return LoginStatus(
       loginRequired: true,
       isAuthorized: false,

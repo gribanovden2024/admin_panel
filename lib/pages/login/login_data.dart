@@ -1,13 +1,13 @@
+import 'package:admin_panel/interseptor/profile/teacher_profile/data/dto/free_token_dto.dart';
+import 'package:admin_panel/interseptor/profile/teacher_profile/data/dto/token_free_request_dto.dart';
+import 'package:admin_panel/interseptor/profile/teacher_profile/data/teacher_profile_service.dart';
 import 'package:admin_panel/interseptor/profile/teacher_profile/data/teacher_profile_url.dart';
 import 'package:admin_panel/interseptor/profile_repository.dart';
-import 'package:admin_panel/pages/login/dto/free_token_dto.dart';
-import 'package:admin_panel/pages/login/teacher_profile/teacher_profile_service.dart';
 import 'package:dio/dio.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:uuid/uuid.dart';
 
 import 'package:admin_panel/interseptor/environment/interceptor/jwt_interceptor.dart';
-import 'dto/token_free_request_dto.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 class LoginData {

@@ -1,14 +1,7 @@
 import 'dart:io' show Platform;
-import 'package:admin_panel/interseptor/profile/teacher_profile/data/teacher_profile_url.dart';
-import 'package:http/http.dart' as http;
-
-// import 'package:dio/browser.dart';
 import 'package:dio/dio.dart';
-
-// import 'package:fittin_demo/util/uuid_manager.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
-import '../pages/login/interceptor/uuid_manager.dart';
+import 'uuid_manager.dart';
 
 /// Interceptor for working with JWT tokens, updating and saving them.
 /// Requires [Dio] to work.

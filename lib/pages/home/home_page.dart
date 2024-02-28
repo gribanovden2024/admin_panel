@@ -1,12 +1,11 @@
 import 'package:admin_panel/pages/home/side_menu.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import '../../constants.dart';
-import '../../controllers/MenuAppController.dart';
-import '../../responsive.dart';
-import '../login/login_page.dart';
-import '../notification_page/notification_page.dart';
-import '../page_2.dart';
+import 'package:admin_panel/constants.dart';
+import 'package:admin_panel/controllers/MenuAppController.dart';
+import 'package:admin_panel/responsive.dart';
+import 'package:admin_panel/pages/notification_page/notification_page.dart';
+import 'package:admin_panel/pages/page_2.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -45,33 +44,31 @@ class _HomePageState extends State<HomePage> {
             Expanded(
               // It takes 5/6 part of the screen
               flex: 5,
-              child: SafeArea(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Row(
-                      children: [
-                        if (!Responsive.isDesktop(context))
-                          IconButton(
-                              icon: const Icon(Icons.menu),
-                              iconSize: 50,
-                              onPressed:
-                                  context.read<MenuAppController>().controlMenu)
-                        else
-                          const SizedBox(width: 50,height: 50,),
-                        const Spacer(),
-                        Text(page, style: defStyle),
-                        const Spacer(),
-                        const SizedBox(width: 50),
-                      ],
-                    ),
-                    Padding(
-                      padding: EdgeInsets.symmetric(
-                          horizontal: defaultPadding),
-                      child: _buildPageWidget(),
-                    ),
-                  ],
-                ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    children: [
+                      if (!Responsive.isDesktop(context))
+                        IconButton(
+                            icon: const Icon(Icons.menu),
+                            iconSize: 50,
+                            onPressed:
+                                context.read<MenuAppController>().controlMenu)
+                      else
+                        const SizedBox(width: 50,height: 50,),
+                      const Spacer(),
+                      Text(page, style: defStyle),
+                      const Spacer(),
+                      const SizedBox(width: 50),
+                    ],
+                  ),
+                  Padding(
+                    padding: EdgeInsets.symmetric(
+                        horizontal: defaultPadding),
+                    child: _buildPageWidget(),
+                  ),
+                ],
               ),
             ),
           ],

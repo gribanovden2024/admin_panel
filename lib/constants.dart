@@ -10,3 +10,8 @@ const defStyle = TextStyle(
   fontSize: 24,
   fontWeight: FontWeight.w500,
 );
+
+final butStyle = ButtonStyle(
+shape: MaterialStatePropertyAll(RoundedRectangleBorder(
+borderRadius: BorderRadius.circular(10.0),
+side: BorderSide(color: borderColor!))));

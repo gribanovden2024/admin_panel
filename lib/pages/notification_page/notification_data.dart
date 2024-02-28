@@ -1,3 +1,4 @@
+import 'package:admin_panel/interseptor/register_modules.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:pretty_dio_logger/pretty_dio_logger.dart';
@@ -19,7 +20,17 @@ class NotificationData {
     dio.interceptors.add(PrettyDioLogger(
       requestHeader: true,
       requestBody: true,
-    )
+    ));
+    dio.interceptors.add(
+      SecureMethodInterceptor(
+        endpoints: [
+          '/auth/email/part1',
+          '/auth/token/free',
+          '/attendance/confirm_attendance/',
+          '/attendance/get_net_attendance/'
+        ],
+        dio: dio,
+      ),
     );
   }
 
@@ -32,8 +43,8 @@ class NotificationData {
   }
 
   Future<Response?> getNotifications() async {
-    Response response = await dio.get(
-        '/admin_panel/notification', data: {'id': '11'});
+    Response response =
+        await dio.get('/admin_panel/notification', data: {'id': '11'});
     if (response.statusCode == 200 /*|| response.statusCode == 400*/)
       return response;
     else
@@ -48,11 +59,16 @@ class NotificationData {
       return null;
   }
 
-  Future<Response?> postNotifications(String id, String message) async {
+  Future<Response?> postNotifications(List<int> id, String message) async {
     dio.options.contentType = 'application/json';
-    Response response = await dio.post('/admin_panel/notification',
-      data: {'id': id,
-        'message': message},);
+    Response response = await dio.post(
+      '/admin_panel/notification/',
+      data: {
+        // 'id': 16,
+        'text': message,
+        'groups': id,
+      },
+    );
     if (response.statusCode == 200 /*|| response.statusCode == 400*/)
       return response;
     else

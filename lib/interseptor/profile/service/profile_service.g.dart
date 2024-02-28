@@ -47,33 +47,6 @@ class _ProfileService implements ProfileService {
   }
 
   @override
-  Future<StudentProfileDto> getStudentProfile() async {
-    const _extra = <String, dynamic>{};
-    final queryParameters = <String, dynamic>{};
-    final _headers = <String, dynamic>{};
-    final Map<String, dynamic>? _data = null;
-    final _result = await _dio
-        .fetch<Map<String, dynamic>>(_setStreamType<StudentProfileDto>(Options(
-      method: 'GET',
-      headers: _headers,
-      extra: _extra,
-    )
-            .compose(
-              _dio.options,
-              '/student/student_profile/',
-              queryParameters: queryParameters,
-              data: _data,
-            )
-            .copyWith(
-                baseUrl: _combineBaseUrls(
-              _dio.options.baseUrl,
-              baseUrl,
-            ))));
-    final value = StudentProfileDto.fromJson(_result.data!);
-    return value;
-  }
-
-  @override
   Future<FreeTokenDto> postTokenFree(
       {required TokenFreeRequestDto request}) async {
     const _extra = <String, dynamic>{};

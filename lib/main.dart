@@ -1,14 +1,8 @@
-import 'dart:io';
-
-import 'package:admin_panel/pages/login/data/configure_dependencies.dart';
-import 'package:admin_panel/pages/login/data/uuid_configurator.dart';
-import 'package:core_interfaces/core_interfaces.dart' hide AppConfig, DebugConfig, Environment;
-import 'package:dio/dio.dart';
+import 'package:admin_panel/interseptor/configure_dependencies.dart';
+import 'package:admin_panel/interseptor/uuid_configurator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get_it/get_it.dart';
-import 'package:pretty_dio_logger/pretty_dio_logger.dart';
-import 'package:provider/provider.dart';
 import 'app.dart';
 import 'interseptor/app_config.dart';
 import 'interseptor/app_environment.dart';

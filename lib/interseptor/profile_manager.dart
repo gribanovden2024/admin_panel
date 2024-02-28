@@ -1,7 +1,6 @@
 import 'package:admin_panel/interseptor/environment/event_bus/event_bus.dart';
 import 'package:admin_panel/interseptor/event/error_event.dart';
 import 'package:admin_panel/interseptor/event/info_event.dart';
-import 'package:admin_panel/interseptor/profile/login_status.dart';
 import 'package:admin_panel/interseptor/profile/user_data.dart';
 import 'package:admin_panel/interseptor/environment/lifecycle_module.dart';
 import 'package:admin_panel/interseptor/profile_repository.dart';
@@ -15,8 +14,6 @@ abstract class IProfile<T extends IUserData> {
 
   BehaviorSubject<int?> get chosenSemester;
 
-  Future<void> updateUserData();
-
   Future<void> changeUserData(T newUserData);
 
   Future<void> logout();
@@ -25,7 +22,6 @@ abstract class IProfile<T extends IUserData> {
 
   Future<void> updateFreeToken();
 
-  Future<void> loginAsStudent(String mail, String password);
 }
 
 class Profile<T extends IUserData> extends LifecycleModule implements IProfile<T> {
@@ -89,31 +85,6 @@ class Profile<T extends IUserData> extends LifecycleModule implements IProfile<T
   }
 
   @override
-  Future<void> loginAsStudent(String mail, String password) async {
-    try {
-      final response = await _profileRepository.emailAndPasswordRequest(mail, password);
-      if (response.accessToken.isNotEmpty) {
-        _eventBus.addEvent(InfoEvent(
-          name: 'user is authorized',
-        ));
-        await _updateIsLoggined(true);
-        updateUserData();
-      } else {
-        _eventBus.addEvent(
-          InfoEvent(
-            name: 'user is not authorized',
-            // payload: status.message,
-          ),
-        );
-        await _updateIsLoggined(false);
-      }
-    } catch (exception) {
-      await _updateIsLoggined(false);
-      rethrow;
-    }
-  }
-
-  @override
   Future<void> logout() async {
     try {
       await updateFreeToken();
@@ -123,34 +94,6 @@ class Profile<T extends IUserData> extends LifecycleModule implements IProfile<T
 
       _eventBus.addEvent(InfoEvent(
         name: 'user has logout',
-      ));
-    } on ErrorEvent catch (exception) {
-      _eventBus.addEvent(exception);
-      rethrow;
-    } catch (unexpectedError) {
-      _eventBus.addEvent(
-        ErrorEvent(
-          name: 'UnexpectedError',
-          message: unexpectedError.toString(),
-        ),
-      );
-      rethrow;
-    }
-  }
-
-
-  @override
-  Future<void> updateUserData() async {
-    if (_isLoggedIn.valueOrNull == false) {
-      return;
-    }
-
-    try {
-      final userData = await _profileRepository.getProfileInfo();
-      _userData.add(userData);
-      _eventBus.addEvent(InfoEvent(
-        name: 'user updated his account',
-        payload: _userData.valueOrNull,
       ));
     } on ErrorEvent catch (exception) {
       _eventBus.addEvent(exception);

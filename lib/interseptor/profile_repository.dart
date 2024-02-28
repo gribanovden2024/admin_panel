@@ -18,10 +18,6 @@ abstract class IProfileRepository<T extends IUserData> {
 
   Future<void> getFreeToken();
 
-  Future<T> getProfileInfo({
-    String? userIdentifier,
-  });
-
   Future<AuthResponse> emailAndPasswordRequest(String email, String password);
 
   Future<LoginStatus> emailRequest(String email);
@@ -77,16 +73,6 @@ class ProfileRepository implements IProfileRepository<UserData> {
       isAuthorized: false,
       loginRequired: false,
     );
-  }
-  @override
-  Future<UserData> getProfileInfo({String? userIdentifier}) async {
-    final response = await _service.getStudentProfile();
-    return UserData(
-      name: response.fullName,
-      group: response.group,
-      course: response.course,
-      acceptPolitics: response.acceptPolitic,
-      subGroup: response.subGroup);
   }
 
   @override
