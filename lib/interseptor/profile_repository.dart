@@ -9,8 +9,8 @@ import 'package:admin_panel/interseptor/profile/user_data.dart';
 import 'package:dio/dio.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:uuid/uuid.dart';
-String accessToken ='';
-String refreshToken ='';
+String? accessToken ='';
+String? refreshToken ='';
 abstract class IProfileRepository<T extends IUserData> {
   Future<T> updateProfileInfo({
     required T request,

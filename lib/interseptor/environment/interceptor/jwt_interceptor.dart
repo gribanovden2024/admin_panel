@@ -103,11 +103,9 @@ class JWTInterceptor extends Interceptor {
     if (_accessToken != null) {
       options.headers['Authorization'] = 'Bearer $_accessToken';
     }
-
     if (options.path == _freeTokenUrl) {
       options.headers['Authorization'] = 'Basic $_freeTokenBasicToken';
     }
-
     return super.onRequest(options, handler);
   }
 
