@@ -19,7 +19,7 @@ class LoginData {
   static Dio dio = Dio();
 
   Future<void> initDio() async {
-    // getFreeToken();
+    dio.options.baseUrl = 'https://vsu-stage.fittin.ru';
     dio.options.headers['Authorization'] = 'Bearer $accessToken';
   }
 
@@ -30,20 +30,19 @@ class LoginData {
   }
 
   Future<bool> emailRequest(String email) async {
-    Response response = await dio.post(
-        'https://vsu-stage.fittin.ru' + TeacherProfileUrl.emailPart1,
+    Response response = await dio.post(TeacherProfileUrl.emailPart1,
         data: {"email": "$email"});
     if (response.statusCode == 200/*|| response.statusCode == 400*/)
       return true;
     else return false;
   }
 
-  Future<bool> confirmEmailCode(String email, String code) async {
-    Response response = await dio.post(
-        'https://vsu-stage.fittin.ru' + TeacherProfileUrl.emailPart2,
+  Future<bool> confirmEmailCode(String? email, String code) async {
+    Response response = await dio.post(TeacherProfileUrl.emailPart2,
         data: {"email": "$email", "code": "$code"});
-    if (response.statusCode == 200/*|| response.statusCode == 400*/) {
+    if (response.statusCode == 200) {
       accessToken = response.data['access_token'];
+      refreshToken = response.data['refresh_token'];
       return true;
     } else return false;
   }
@@ -66,17 +65,3 @@ class LoginData {
     return uuid;
   }
 }
-
-// class LoginStatus {
-//   final bool isAuthorized;
-//   final bool? registrationRequired;
-//   final bool? loginRequired;
-//   final String? message;
-//
-//   LoginStatus({
-//     required this.isAuthorized,
-//     this.registrationRequired,
-//     this.loginRequired = true,
-//     this.message,
-//   });
-// }

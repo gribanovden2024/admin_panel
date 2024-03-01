@@ -1,6 +1,3 @@
-import 'dart:convert';
-import 'dart:io';
-
 import 'package:admin_panel/interseptor/register_modules.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
@@ -176,52 +173,12 @@ class AuthInterceptor extends Interceptor {
     return uuid;
   }
 
-  DateTime _getIncDateTime(String token) {
-    return DateTime.fromMillisecondsSinceEpoch(json.decode(utf8
-        .fuse(base64Url)
-        .decode(base64.normalize(token.split('.')[1])))['iat'] *
-        1000);
-  }
-
-  DateTime _getResponseDateTime(Headers headers) {
-    return HttpDate.parse(headers['date']!.first);
-  }
-
-  Future<void> clearTokens() async {
-    _accessToken = null;
-    _refreshToken = null;
-      await storage.write(key: 'accessToken', value: null);
-      await storage.write(key: 'refreshToken', value: null);
-  }
-
-  /// Make a request to update the JWT token and save it to cache.
-  Future<void> _refresh() async {
-    Response<dynamic>? response = await dio.post(
-      refreshUrl,
-      data: {'refresh_token': _refreshToken},
-      options: Options(
-        validateStatus: (status) {
-          return status != null && status < 500;
-        },
-      ),
-    );
-    if (response.statusCode == 201 || response.statusCode == 200) {
-      await _saveTokens(
-        accessToken2: response.data['access_token'],
-        refreshToken2: response.data['refresh_token'],
-      );
-    } else {
-      await updateFreeToken();
-    }
-  }
-
   /// Repeat the failed request.
   Future<Response<dynamic>> _retry(RequestOptions requestOptions) {
     final options = Options(
       method: requestOptions.method,
       headers: requestOptions.headers,
     );
-
     return dio.request<dynamic>(
       requestOptions.path,
       data: requestOptions.data,

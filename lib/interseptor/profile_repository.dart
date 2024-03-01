@@ -9,8 +9,8 @@ import 'package:admin_panel/interseptor/profile/user_data.dart';
 import 'package:dio/dio.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:uuid/uuid.dart';
-String? accessToken ='';
-String? refreshToken ='';
+String? accessToken;
+String? refreshToken;
 abstract class IProfileRepository<T extends IUserData> {
   Future<T> updateProfileInfo({
     required T request,
@@ -50,20 +50,6 @@ class ProfileRepository implements IProfileRepository<UserData> {
   @override
   Future<LoginStatus> emailRequest(String email) async {
     if (email == 'test_t_t') {
-      return LoginStatus(
-        loginRequired: true,
-        isAuthorized: false,
-      );
-    }
-    return LoginStatus(
-      isAuthorized: false,
-      loginRequired: false,
-    );
-  }
-
-  @override
-  Future<LoginStatus> phoneRequest(String phone) async {
-    if (phone == '79999999999') {
       return LoginStatus(
         loginRequired: true,
         isAuthorized: false,

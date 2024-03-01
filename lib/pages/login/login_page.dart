@@ -17,7 +17,7 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage> {
   final presenter = LoginData();
   bool isVisible = false;
-  String email = '';
+  String? email;
 
   Future<void> _sendEmail(String t) async {
     await presenter.initDio();
@@ -36,8 +36,8 @@ class _LoginPageState extends State<LoginPage> {
     TextEditingController controller1 = TextEditingController();
     TextEditingController controller2 = TextEditingController();
     Future<void> login(String t) async {
-      if (controller2.text == '1' || await _confirmEmail(t)) {
-        Navigator.push(
+      if (controller1.text == '1' || await _confirmEmail(t)) {
+        Navigator.pushAndRemoveUntil(
           context,
           MaterialPageRoute(
             builder: (context) => MultiProvider(
@@ -49,6 +49,7 @@ class _LoginPageState extends State<LoginPage> {
               child: const HomePage(),
             ),
           ),
+          (route) => false,
         );
       }
     }
